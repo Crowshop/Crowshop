@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boutique Simple</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #000; /* Fond noir */
+            color: #fff; /* Texte en blanc */
+        }
+        header {
+            background: #1a1a1a; /* Couleur de l'en-tête noir foncé */
+            color: #fff; /* Texte en blanc */
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+        nav a {
+            color: #fff; /* Liens en blanc */
+            margin: 0 15px;
+            text-decoration: none;
+        }
+        .discord-logo {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 40px;
+            height: 40px;
+        }
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 20px auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        .product {
+            background: #333; /* Fond des produits noir foncé */
+            border: 1px solid #444; /* Bordure gris foncé */
+            border-radius: 5px;
+            margin: 10px;
+            padding: 20px;
+            width: 30%;
+            box-shadow: 0 2px 5px rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s;
+        }
+        .product:hover {
+            transform: scale(1.05);
+        }
+        .product img {
+            max-width: 100%;
+            height: auto;
+        }
+        .cart {
+            background: #333;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(255, 255, 255, 0.1);
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: #1a1a1a;
+            color: #fff;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+        @media (max-width: 768px) {
+            .product {
+                width: 100%;
+            }
+        }
+        /* Style pour les flocons de neige */
+        .snowflake {
+            position: absolute;
+            top: -10px;
+            z-index: 1000;
+            font-size: 1.2em;
+            color: #fff;
+            pointer-events: none;
+            animation: fall linear infinite;
+        }
+        @keyframes fall {
+            0% {
+                transform: translateY(0) rotate(0deg);
+            }
+            100% {
+                transform: translateY(calc(100vh + 10px)) rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Boutique Simple</h1>
+    <nav>
+        <a href="#products">Produits</a>
+        <a href="#cart">Mon Panier</a>
+    </nav>
+    <a href="https://discord.gg/3zgzfPPYmf" target="_blank">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/9/98/Discord_logo.svg" alt="Discord" class="discord-logo">
+    </a>
+</header>
+
+<div class="container" id="products">
+    <div class="product" data-id="1">
+        <img src="https://cdn.discordapp.com/attachments/1289306649894322240/1289309770653892709/1727465799153.jpg?ex=66f85acb&is=66f7094b&hm=966344bc0eb4387145303629fca7dd502aa4f1fda2b9db6c91d0bc43aa7d5111&" alt="Crunchyroll">
+        <h2>Crunchyroll</h2>
+        <p>Comptes Crunchyroll premium</p>
+        <p>Prix: 0.90€</p>
+        <p>Stock limité : 15</p>
+        <button onclick="addToCart(1, 'Crunchyroll', 0.90)">Ajouter au panier</button>
+    </div>
+    <div class="product" data-id="2">
+        <img src="https://cdn.discordapp.com/attachments/1289306636464427008/1289311421322100746/ADN-Anime-Digital-Network.jpg?ex=66f85c55&is=66f70ad5&hm=0f9ba42286f0770c627dc483478b881d77c3ea4eead15945323a9024c5ff2adb&" alt="ADN">
+        <h2>ADN</h2>
+        <p>Comptes ADN premium</p>
+        <p>Prix: 0.50€</p>
+        <p>Stock limité : 50</p>
+        <button onclick="addToCart(2, 'ADN', 0.50)">Ajouter au panier</button>
+    </div>
+    <div class="product" data-id="3">
+        <img src="https://cdn.discordapp.com/attachments/1289306636464427008/1289311789741375539/spotify-heres-how-to-create-and-edit-playlists-a-complete-step-by-step-guide.jpg?ex=66f85cac&is=66f70b2c&hm=127a58ef6b12089b4cea431548ac0b0f8244c11ff25f7414d5da308d1e923627&" alt="Spotify Premium">
+        <h2>Spotify Premium</h2>
+        <p>Comptes Spotify premium</p>
+        <p>Prix: 1.00€</p>
+        <p>Stock limité : 10</p>
+        <button onclick="addToCart(3, 'Spotify Premium', 1.00)">Ajouter au panier</button>
+    </div>
+</div>
+
+<div class="container" id="cart">
+    <div class="cart">
+        <h2>Mon Panier</h2>
+        <div id="cartItems"></div>
+        <div class="cart-footer">
+            <p id="totalPrice">Total: 0€</p>
+            <button onclick="showPaymentOptions()">Valider l'Achat</button>
+        </div>
+    </div>
+    <div class="payment-options" id="paymentOptions" style="display: none;">
+        <h3>Sélectionnez votre méthode de paiement</h3>
+        <button onclick="payWithPayPal()">PayPal</button>
+        <button onclick="payWithIBAN()">Carte Bancaire / IBAN</button>
+        <button onclick="payWithLitecoin()">Litecoin</button>
+    </div>
+</div>
+
+<footer>
+    <p>&copy; 2024 Boutique Simple</p>
+</footer>
+
+<script>
+    // Script pour les flocons de neige
+    function createSnowflake() {
+        const snowflake = document.createElement('div');
+        snowflake.className = 'snowflake';
+        snowflake.textContent = '❄'; // Symbole de flocon de neige
+
+        // Position aléatoire sur la largeur de l'écran
+        snowflake.style.left = Math.random() * window.innerWidth + 'px';
+
+        // Durée aléatoire pour l'animation
+        snowflake.style.animationDuration = 5 + Math.random() * 10 + 's';
+
+        document.body.appendChild(snowflake);
+
+        // Retirer le flocon après la fin de son animation
+        setTimeout(() => {
+            snowflake.remove();
+        }, 15000); // Supprimer après 15 secondes
+    }
+
+    // Générer un flocon de neige toutes les 300 ms
+    setInterval(createSnowflake, 300);
+
+    let cart = [];
+
+    function addToCart(id, name, price) {
+        const product = { id, name, price };
+        cart.push(product);
+        alert(name + " a été ajouté au panier !");
+        updateCartDisplay();
+    }
+
+    function updateCartDisplay() {
+        const cartItemsDiv = document.getElementById('cartItems');
+        cartItemsDiv.innerHTML = ''; // Réinitialiser l'affichage du panier
+        let total = 0;
+
+        cart.forEach(item => {
+            total += item.price;
+            cartItemsDiv.innerHTML += `<p>${item.name} - ${item.price}€</p>`;
+        });
+
+        document.getElementById('totalPrice').innerText = 'Total: ' + total + '€';
+    }
+
+    function showPaymentOptions() {
+        if (cart.length === 0) {
+            alert("Votre panier est vide !");
+            return;
+        }
+        
+        document.getElementById('paymentOptions').style.display = 'block';
+    }
+
+    function payWithPayPal() {
+        let total = cart.reduce((sum, item) => sum + item.price, 0);
+        
+        const paypalLink = `https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=paypalpro0174@gmail.com&item_name=Commande&amount=${total}&currency_code=EUR`;
+
+        alert("Merci pour votre commande ! Cliquez sur le lien suivant pour effectuer votre paiement via PayPal : \n" + paypalLink);
+
+        window.open(paypalLink, '_blank');
+
+        cart = [];
+        updateCartDisplay();
+        document.getElementById('paymentOptions').style.display = 'none';
+    }
+
+    function payWithIBAN() {
+        let total = cart.reduce((sum, item) => sum + item.price, 0);
+
+        alert("Merci pour votre commande ! Pour effectuer votre paiement, veuillez utiliser l'IBAN suivant :\n" +
+              "FR7630004006000000150854184\nMontant à payer : " + total + "€");
+
+        cart = [];
+        updateCartDisplay();
+        document.getElementById('paymentOptions').style.display = 'none';
+    }
+
+    function payWithLitecoin() {
+        const litecoinAddress = "LX4bCHPHo3aBDuaXxM8rDSxhDjkyPZqSfS";
+
+        alert("Merci pour votre commande ! Veuillez envoyer le montant total en Litecoin à l'adresse suivante : \n" + litecoinAddress);
+
+        cart = [];
+        updateCartDisplay();
+        document.getElementById('paymentOptions').style.display = 'none';
+    }
+</script>
+
+</body>
+</html>
