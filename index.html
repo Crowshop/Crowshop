@@ -148,8 +148,6 @@
     </div>
     <div class="payment-options" id="paymentOptions" style="display: none;">
         <h3>Sélectionnez votre méthode de paiement</h3>
-        <button onclick="payWithPayPal()">PayPal</button>
-        <button onclick="payWithIBAN()">Carte Bancaire / IBAN</button>
         <button onclick="payWithLitecoin()">Litecoin</button>
     </div>
 </div>
@@ -210,44 +208,18 @@
             return;
         }
         
-        document.getElementById('paymentOptions').style.display = 'block';
-    }
+        document.getElementById('paymentOptions').style.display = 'block'; }
 
-    function payWithPayPal() {
-        let total = cart.reduce((sum, item) => sum + item.price, 0);
-        
-        const paypalLink = `https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=paypalpro0174@gmail.com&item_name=Commande&amount=${total}&currency_code=EUR`;
+function payWithLitecoin() {
+    const litecoinAddress = "LX4bCHPHo3aBDuaXxM8rDSxhDjkyPZqSfS";
+    let total = cart.reduce((sum, item) => sum + item.price, 0);
 
-        alert("Merci pour votre commande ! Cliquez sur le lien suivant pour effectuer votre paiement via PayPal : \n" + paypalLink);
+    alert("Merci pour votre commande ! Veuillez envoyer le montant total (" + total + "€) en Litecoin à l'adresse suivante : \n" + litecoinAddress);
 
-        window.open(paypalLink, '_blank');
+    cart = [];
+    updateCartDisplay();
+    document.getElementById('paymentOptions').style.display = 'none';
+}
 
-        cart = [];
-        updateCartDisplay();
-        document.getElementById('paymentOptions').style.display = 'none';
-    }
-
-    function payWithIBAN() {
-        let total = cart.reduce((sum, item) => sum + item.price, 0);
-
-        alert("Merci pour votre commande ! Pour effectuer votre paiement, veuillez utiliser l'IBAN suivant :\n" +
-              "FR7630004006000000150854184\nMontant à payer : " + total + "€");
-
-        cart = [];
-        updateCartDisplay();
-        document.getElementById('paymentOptions').style.display = 'none';
-    }
-
-    function payWithLitecoin() {
-        const litecoinAddress = "LX4bCHPHo3aBDuaXxM8rDSxhDjkyPZqSfS";
-
-        alert("Merci pour votre commande ! Veuillez envoyer le montant total en Litecoin à l'adresse suivante : \n" + litecoinAddress);
-
-        cart = [];
-        updateCartDisplay();
-        document.getElementById('paymentOptions').style.display = 'none';
-    }
-</script>
-
-</body>
+</script></body>
 </html>
